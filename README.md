@@ -1,5 +1,5 @@
-## Specialization System programming & Algorithm
+# Specialization System programming & Algorithm
 
-# Linux Programming
+## Linux Programming
 
 by Wilfried Hennuyer, Software Engineer at Holberton School 
