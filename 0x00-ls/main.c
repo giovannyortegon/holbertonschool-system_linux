@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
 	if (argc == 1)
 	{
-		read_dir(".", 0);
+		read_dir(".", flags);
 	}
 	else
 	{
@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
 				printf("%s: \n", args[i]);
 			read_dir(args[i], flags);
 		}
+		free_arr(args, j);
 	}
-	free_arr(args, j);
 	exit(EXIT_SUCCESS);
 }
 void read_dir(char *args, char *flag)
