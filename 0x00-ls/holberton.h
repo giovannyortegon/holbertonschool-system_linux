@@ -12,4 +12,10 @@
 #include <time.h>
 #include <pwd.h>
 
+void error_dir(int dir);
+void free_arr(char **arg, int len);
+char *_strcpy(char *dest, char *src);
+int _strlen(char *str);
+int _strncmp(char *src1, char *src2, int n);
+
 #endif /* HOLBERTON.H */
