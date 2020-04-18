@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
 	char **args;
 	char flags[5] = {0};
-	int ret, str_len;
+	int ret, str_len, len;
 	int j = 0, x = 0;
 
 	if (argc == 1)
@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 			ret = _strncmp(argv[i], "-", 1);
 			if (ret == 0)
 			{
+				len += 1;
 				if (_strlen(argv[i]) == 1 )
 					flags[x++] = argv[i][1];
 				else
@@ -39,15 +40,17 @@ int main(int argc, char *argv[])
 				free_arr(args, j);
 				exit(EXIT_FAILURE);
 			}
-			
 			_strcpy(args[j], argv[i]);
 			j++;
+			
 		}
 		for (int i = 0; i < j ; i++)
 		{
 			if (j != 1)
 				printf("%s: \n", args[i]);
 			read_dir(args[i], flags);
+			if (i < j -1)
+				printf("\n");
 		}
 		free_arr(args, j);
 	}
@@ -56,7 +59,8 @@ int main(int argc, char *argv[])
 void read_dir(char *args, char *flag)
 {
 //	int fd_stat;
-	int col = 0;
+	int i, col = 0,fa = 0;
+	int f1 = 0;
 	DIR *dir;
 	struct dirent *read = NULL;
 	struct stat;
@@ -70,24 +74,31 @@ void read_dir(char *args, char *flag)
 		perror(args);
 		return;
 	}
-
+	for (i = 0; flag[i]; i++)
+	{
+		if ((strcmp(&flag[i], "a")) == 0)
+			fa = 1;
+		if ((strcmp(&flag[i], "1")) == 0)
+			f1 = 1;
+	}
 	while ((read = readdir(dir)) != NULL)
 	{
-		if (strcmp(read->d_name, ".") == 0 || strcmp(read->d_name, "..") == 0)
-			continue;
-		if (strncmp(read->d_name, ".", 1) == 0)
-			continue;
-		if (col == 13)
+		if (fa == 0)
+			if (strcmp(read->d_name, ".") == 0 || strcmp(read->d_name, "..") == 0)
+				continue;
+		if (col == 13 && f1 == 0)
 		{
 			col = 0;
 			printf("\n");
 		}
 		fprintf(stdout, "%s\t", read->d_name);
 		col += 1;
+		if (f1 == 1)
+			printf("\n");
 	}
 	printf("\n");
 	closedir(dir);
-}
+}/*
 void error_dir(int dir)
 {
 	switch (dir)
@@ -144,4 +155,4 @@ int _strncmp(char *src1, char *src2, int n)
 			flag += 1;
 	}
 	return (flag);
-}
+}*/

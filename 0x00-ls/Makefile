@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall -Werror -Wextra -pedantic
-SRC = main.c
+SRC = *.c
 NAME = hls
 
 all:
