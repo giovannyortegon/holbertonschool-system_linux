@@ -11,9 +11,18 @@
 #include <errno.h>
 #include <time.h>
 #include <pwd.h>
+#include <grp.h>
+
+#define MAX_LENGTH 1024
+
+struct fg
+{
+	int fa, fA, f1, fl;
+};
 
 void error_dir(int dir);
 void free_arr(char **arg, int len);
+void *_flags(char *flag, struct fg *f);
 char *_strcpy(char *dest, char *src);
 int _strlen(char *str);
 int _strncmp(char *src1, char *src2, int n);

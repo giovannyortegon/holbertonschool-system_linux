@@ -1,6 +1,7 @@
 #include "holberton.h"
-#define MAX_LENGTH 1024
 
+void *usr_information(char *src, struct stat *statbuf, struct stat *_dir)
+void *grp_information(char *src, struct stat *statbuf, struct stat *_dir);
 void read_dir(char *args, char *flag);
 
 int main(int argc, char *argv[])
@@ -64,58 +65,113 @@ int main(int argc, char *argv[])
 }
 void read_dir(char *args, char *flag)
 {
-//	int fd_stat;
-	int i, col = 0;
-	int f1 = 0, fa = 0, fA = 0;
+	char File[60] = {0};
+	int i, col = 0, c_fl = 0;
 	DIR *dir;
+	struct fg f = {0, 0, 0, 0};
 	struct dirent *read = NULL;
-	struct stat;
-//  buf
+	struct stat _dir, file;
 
-//	fd_stat = lstat(args, &buf);
+	lstat(args, &_dir);
 	if ((dir = opendir(args)) == NULL)
 	{
-		error_dir(errno);
 		perror(args);
+		error_dir(errno);
 		return;
 	}
-	for (i = 0; flag[i]; i++)
-	{
-		switch(flag[i])
-		{
-			case 'a':
-				fa = 1;
-				break;
-			case 'A':
-				fA = 1;
-				break;
-			case '1':
-				f1 = 1;
-				break;
-		}
-	}
-	printf("-a: %d, -1: %d -A: %d\n", fa, f1, fA);
+
+	_flags(flag, &f);
+
 	while ((read = readdir(dir)) != NULL)
 	{
-		if (fa == 0 && read->d_type == DT_DIR)
+		lstat(read->d_name, &file);
+		if (f.fa == 0 && read->d_type == DT_DIR)
 			if (_strncmp(read->d_name, ".", 1) == 0 ||
 				_strncmp(read->d_name, "..", 1) == 0)
 				continue;
-		if (fA == 0 && fa == 0)
+		if (f.fA == 0 && f.fa == 0)
 		{
 			if (_strncmp(read->d_name, ".", 1) == 0)
 				continue;
 		}
-		else if (col == 13 && f1 == 0 )
+		else if (col == 13 && f.f1 == 0 )
 		{
 			col = 0;
 			printf("\n");
 		}
-		fprintf(stdout, "%s\t", read->d_name);
+		if (f.fl == 0)
+			fprintf(stdout, "%s\t", read->d_name);
+		else
+		{
+			c_fl += 1;
+			print_dir(read->d_name, &file, &_dir);
+			fprintf(stdout, "%s\t", read->d_name);
+		}
+		fprintf(stdout, "%s\t", File);
 		col += 1;
-		if (f1 == 1)
+		if (f.f1 == 1 || f.fl == 1)
 			printf("\n");
 	}
+	if (f.fl == 1)
+			printf("tota %d\n", c_fl);
+
 	printf("\n");
 	closedir(dir);
+}
+void *usr_infomation(char *src, struct stat *statbuf, struct stat *_dir)
+{
+	struct passwd *usr;
+	struct group *grp;
+
+	if (S_ISDIR(statbuf->st_mode))
+		printf("d");
+	else
+		printf("-");
+                if (statbuf->st_mode && S_IRUSR)
+                        printf("r");
+                else
+                        printf("-");
+                if (statbuf->st_mode && S_IWUSR)
+                        printf("w");
+                else
+                        printf("-");
+                if (statbuf->st_mode && S_IXUSR)
+                        printf("x");
+                else
+                        printf("-");
+                usr = getpwuid(_dir->st_uid);
+				grp = getgrgid(_dir->st_gid);
+                                printf(" %d %s %s %d %s\n",
+                                statbuf->st_nlink,
+                                usr->pw_name,
+								grp->gr_name,
+                                statbuf->st_size,
+                                ctime(&_dir->st_mtime));
+}
+/**
+ * _flags - Manage flags
+ * @flag:	Store all flags of command
+ * @f:		All flags
+ * Return:  Setup flags
+ */
+void *_flags(char *flag, struct fg *f)
+{
+	for (int i = 0; flag[i]; i++)
+	{
+		switch (flag[i])
+		{
+			case 'a':
+				f->fa = 1;
+				break;
+			case 'A':
+				f->fA = 1;
+				break;
+			case '1':
+				f->f1 = 1;
+				break;
+			case 'l':
+				f->fl = 1;
+				break;
+		}
+	}
 }
