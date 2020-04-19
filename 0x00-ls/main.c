@@ -7,8 +7,8 @@ int main(int argc, char *argv[])
 {
 	char **args;
 	char flags[5] = {0};
-	int ret, str_len, len;
-	int j = 0, x = 0;
+	int ret, str_len, len = 0;
+	int j = 0, x = 0, y;
 
 	if (argc == 1)
 	{
@@ -25,17 +25,18 @@ int main(int argc, char *argv[])
 		for (int i = 1; i < argc; i++)
 		{
 			ret = _strncmp(argv[i], "-", 1);
+			str_len = _strlen(argv[i]);
 			if (ret == 0)
 			{
 				len += 1;
-				if (_strlen(argv[i]) == 1 )
-					flags[x++] = argv[i][1];
-				else
-					_strcpy(flags, argv[i]);
+				if (str_len >= 2 )
+				{
+					for (y = 1; y < str_len;x++, y++)
+						flags[x] = argv[i][y];
+				}
 				continue;
 			}
-			str_len = _strlen(argv[i]) + 1;
-			if ((args[j] = (char*)malloc(str_len*sizeof(char))) == NULL)
+			if ((args[j] = (char*)malloc(str_len + 1*sizeof(char))) == NULL)
 			{
 				free_arr(args, j);
 				exit(EXIT_FAILURE);
@@ -44,6 +45,8 @@ int main(int argc, char *argv[])
 			j++;
 			
 		}
+		if (len != 0)
+			read_dir(".", flags);
 		for (int i = 0; i < j ; i++)
 		{
 			if (j != 1)
@@ -67,7 +70,7 @@ void read_dir(char *args, char *flag)
 //  buf
 
 //	fd_stat = lstat(args, &buf);
-	//printf("%s\n", flag);
+//	printf("%s\n", flag);
 	if ((dir = opendir(args)) == NULL)
 	{
 		error_dir(errno);
@@ -76,17 +79,25 @@ void read_dir(char *args, char *flag)
 	}
 	for (i = 0; flag[i]; i++)
 	{
-		if ((strcmp(&flag[i], "a")) == 0)
-			fa = 1;
-		if ((strcmp(&flag[i], "1")) == 0)
-			f1 = 1;
+		switch(flag[i])
+		{
+			case 'a':
+				fa = 1;
+				break;
+			case '1':
+				f1 = 1;
+				break;
+		}
 	}
+
+//	printf("a: %d, 1: %d\n", fa, f1);
 	while ((read = readdir(dir)) != NULL)
 	{
 		if (fa == 0)
-			if (strcmp(read->d_name, ".") == 0 || strcmp(read->d_name, "..") == 0)
+			if (_strncmp(read->d_name, ".", 1) == 0 ||
+				_strncmp(read->d_name, "..", 1) == 0)
 				continue;
-		if (col == 13 && f1 == 0)
+		else if (col == 13 && f1 == 0 )
 		{
 			col = 0;
 			printf("\n");
@@ -98,61 +109,4 @@ void read_dir(char *args, char *flag)
 	}
 	printf("\n");
 	closedir(dir);
-}/*
-void error_dir(int dir)
-{
-	switch (dir)
-	{
-		case 2:
-			fprintf(stderr, "hls: cannot access ");
-			break;
-		case 13:
-			fprintf(stderr, "hls: cannot open directory ");
-			break;
-	}
 }
-
-void free_arr(char **arg, int len)
-{
-	int i;
-
-	for (i = 0; i < len ; i++)
-	{
-		free(arg[i]);
-	}
-	free(arg);
-}
-int _strlen(char *str)
-{
-	int i;
-
-	for (i = 0; str[i] != '\0'; i++)
-		;
-
-	return (i);
-}
-char *_strcpy(char *dest, char *src)
-{
-        int i;
-
-        for (i = 0; src[i] != '\0'; i++)
-                dest[i] = src[i];
-        dest[i++] = '\0';
-
-        return (dest);
-}
-int _strncmp(char *src1, char *src2, int n)
-{
-	int i, flag = 0;
-
-	for (i = 0; i <=n && src1[i]; i++)
-	{
-		if (src2[i] == '\0')
-			break;
-		else if (src1[i] == src2[i])
-			continue;
-		else
-			flag += 1;
-	}
-	return (flag);
-}*/

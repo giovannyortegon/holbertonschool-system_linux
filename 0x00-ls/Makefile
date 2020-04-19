@@ -5,3 +5,5 @@ NAME = hls
 
 all:
 	$(CC) -g $(SRC) -o $(NAME)
+clean:
+	rm $(NAME)
