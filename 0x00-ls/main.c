@@ -45,15 +45,18 @@ int main(int argc, char *argv[])
 			j++;
 			
 		}
-		if (len != 0)
+		if (len != 0 && j == 0)
 			read_dir(".", flags);
-		for (int i = 0; i < j ; i++)
+		else
 		{
-			if (j != 1)
-				printf("%s: \n", args[i]);
-			read_dir(args[i], flags);
-			if (i < j -1)
-				printf("\n");
+			for (int i = 0; i < j ; i++)
+			{
+				if (j != 1)
+					printf("%s: \n", args[i]);
+				read_dir(args[i], flags);
+				if (i < j -1)
+					printf("\n");
+			}
 		}
 		free_arr(args, j);
 	}
@@ -62,15 +65,14 @@ int main(int argc, char *argv[])
 void read_dir(char *args, char *flag)
 {
 //	int fd_stat;
-	int i, col = 0,fa = 0;
-	int f1 = 0;
+	int i, col = 0;
+	int f1 = 0, fa = 0, fA = 0;
 	DIR *dir;
 	struct dirent *read = NULL;
 	struct stat;
 //  buf
 
 //	fd_stat = lstat(args, &buf);
-//	printf("%s\n", flag);
 	if ((dir = opendir(args)) == NULL)
 	{
 		error_dir(errno);
@@ -84,19 +86,26 @@ void read_dir(char *args, char *flag)
 			case 'a':
 				fa = 1;
 				break;
+			case 'A':
+				fA = 1;
+				break;
 			case '1':
 				f1 = 1;
 				break;
 		}
 	}
-
-//	printf("a: %d, 1: %d\n", fa, f1);
+	printf("-a: %d, -1: %d -A: %d\n", fa, f1, fA);
 	while ((read = readdir(dir)) != NULL)
 	{
-		if (fa == 0)
+		if (fa == 0 && read->d_type == DT_DIR)
 			if (_strncmp(read->d_name, ".", 1) == 0 ||
 				_strncmp(read->d_name, "..", 1) == 0)
 				continue;
+		if (fA == 0 && fa == 0)
+		{
+			if (_strncmp(read->d_name, ".", 1) == 0)
+				continue;
+		}
 		else if (col == 13 && f1 == 0 )
 		{
 			col = 0;
