@@ -4,6 +4,6 @@ SRC = *.c
 NAME = hls
 
 all:
-	$(CC) -g $(SRC) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
 clean:
 	rm $(NAME)
