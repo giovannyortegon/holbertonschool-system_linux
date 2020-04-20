@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
 	char **args, flags[5] = {0};
-	int ret, str_len, len = 0, j = 0, x = 0, y;
+	int i, ret, str_len, len = 0, j = 0, x = 0, y;
 
 	if (argc == 1)
 		read_dir(".", flags);
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 			perror("Failed Memory");
 			exit(EXIT_FAILURE);
 		}
-		for (int i = 1; i < argc; i++)
+		for (i = 1; i < argc; i++)
 		{
 			ret = _strncmp(argv[i], "-", 1);
 			str_len = _strlen(argv[i]);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 			read_dir(".", flags);
 		else
 		{
-			for (int i = 0; i < j ; i++)
+			for (i = 0; i < j ; i++)
 			{
 				if (j != 1)
 					printf("%s: \n", args[i]);

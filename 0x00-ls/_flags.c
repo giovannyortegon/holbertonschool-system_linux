@@ -7,7 +7,9 @@
  */
 void _flags(char *flag, struct fg *f)
 {
-	for (int i = 0; flag[i]; i++)
+	int i;
+
+	for (i = 0; flag[i]; i++)
 	{
 		switch (flag[i])
 		{
