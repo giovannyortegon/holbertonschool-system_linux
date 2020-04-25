@@ -1,10 +1,10 @@
 CC = gcc
-#EFLAGS = -g -Wall -Wextra -Werror -pedantic
+EFLAGS = -g -Wall -Wextra -Werror -pedantic
 SRC = *.c
 NAME = laps
 
 all:
-	$(CC) $(SRC) -o $(NAME)
+	$(CC) $(EFLAGS) $(SRC) -o $(NAME)
 clean:
 	rm $(NAME)
 layout:

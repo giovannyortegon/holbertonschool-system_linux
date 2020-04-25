@@ -8,7 +8,8 @@ void race_state(int *id, size_t size)
 {
 	static int len;
 	static int **num;
-	size_t i, j = 0, flag = 0;
+	int j = 0;
+	size_t i, flag = 0;
 
 	if (num == NULL && len == 0)
 	{

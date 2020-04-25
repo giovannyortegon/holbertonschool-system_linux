@@ -6,7 +6,7 @@
  */
 void print_matrix(int **arr, size_t n)
 {
-	size_t i, j;
+	size_t i;
 
 	printf("Race state:\n");
 	for (i = 0; i < n; i++)
