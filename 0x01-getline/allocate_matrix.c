@@ -2,18 +2,17 @@
 /**
  * allocate_matrix - allocate memory to the array
  * @arr:	array
- * @col:	columns of the array
  */
-void allocate_matrix(int ***arr, size_t col)
+void allocate_matrix(int ***arr)
 {
 	size_t i;
 	int **ptr;
 
-	ptr = (int **) malloc(col * sizeof(int *));
+	ptr = (int **) malloc(MAX_LENGTH * sizeof(int *));
 	if (ptr == NULL)
 		exit(EXIT_FAILURE);
 
-	for (i = 0; i < col; i++)
+	for (i = 0; i < MAX_LENGTH; i++)
 	{
 		ptr[i] = (int *)malloc(2 * sizeof(int));
 		if (ptr[i] == NULL)

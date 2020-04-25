@@ -8,10 +8,11 @@ void print_matrix(int **arr, size_t n)
 {
 	size_t i, j;
 
+	printf("Race state:\n");
 	for (i = 0; i < n; i++)
 	{
-		for (j = 0; j < 2; j++)
-			printf("%d ", arr[i][j]);
-		printf("\n");
+		printf("Car %d [%d laps]\n",
+				arr[i][0],
+				arr[i][1]);
 	}
 }
