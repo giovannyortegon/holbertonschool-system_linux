@@ -1,37 +1,77 @@
 #include "laps.h"
-/**
- * race_state - add cars and count the laps
- * @id:		add cars
- * @size:	numbers of cars
- */
+
 void race_state(int *id, size_t size)
 {
-	static int len;
-	static int **num;
-	int j = 0;
-	size_t i, flag = 0;
+	static RaceCar *cars;
+	RaceCar *Cars;
 
-	if (num == NULL && len == 0)
+	size_t i;
+
+	if (id == NULL && size == 0)
 	{
-		allocate_matrix(&num);
-		len = insert_element(num, id, size);
+		free_cars(cars);
+		return;
+	}
+	for (i = 0; i < size; i++)
+		insert_car(&cars, id[i]);
+	Cars = cars;
+	printf("Race state:\n");
+	while (Cars != NULL)
+	{
+		printf("Car %d [%d laps]\n", Cars->id, Cars->laps);
+		Cars = Cars->next;
+	}
+}
+void insert_car(RaceCar **cars, int id)
+{
+	RaceCar *curr, *car;
+
+	if (*cars == NULL || (*cars)->id > id)
+	{
+		car = new_car(id);
+		car->next = (*cars);
+		(*cars) = car;
+		printf("Car %d joined the race\n", car->id);
 	}
 	else
 	{
-		for (i = 0; i < size; i++)
+		car = (*cars);
+		while (car->next != NULL && car->next->id <= id)
 		{
-			for (j = 0; j < len; j++)
-			{
-				if (num[j][0] == id[i])
-				{
-					num[j][1] += 1;
-					flag = 1;
-				}
-			}
+			car = car->next;
 		}
-		if (flag == 0)
-			len = insert_element(num, id, size);
+		if (car->id == id)
+		{
+			car->laps++;
+			return;
+		}
+		curr = new_car(id);
+		curr->next = car->next;
+		car->next = curr;
+		printf("Car %d joined the race\n", curr->id);
 	}
-	if (num != NULL && size != 0)
-		print_matrix(num, len);
+}
+RaceCar *new_car(int id)
+{
+	RaceCar *car;
+
+	car = (RaceCar *) malloc(sizeof(RaceCar));
+	if (car == NULL)
+		exit(EXIT_FAILURE);
+
+	car->id = id;
+	car->laps = 0;
+	car->next = NULL;
+	return car;
+}
+void free_cars(RaceCar *cars)
+{
+	RaceCar *tmp;
+
+	while (cars != NULL)
+	{
+		tmp = cars;
+		cars = cars->next;
+		free(tmp);
+	}
 }

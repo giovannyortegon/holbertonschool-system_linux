@@ -1,18 +1,25 @@
-#ifndef __LAPS_H__
-#define __LAPS_H__
+#ifndef LAPS_H
+#define LAPS_H
 
 #include<stdio.h>
 #include<stdlib.h>
-#include<string.h>
 
-#define MAX_LENGTH 10
+/**
+ * struct race - strucuture of cars in the race
+ * @id:   number of cars
+ * @laps: counter of laps
+ * @next: pointer to another node
+ */
+typedef struct race
+{
+	int id;
+	int laps;
+	struct race *next;
+} RaceCar;
 
-void swap(int *x, int *y);
-void sort_list(int **list, size_t n);
+RaceCar *new_car(int id);
+void free_cars(RaceCar *cars);
+void insert_car(RaceCar **cars, int id);
 void race_state(int *id, size_t size);
-void allocate_matrix(int ***arr);
-void free_matrix(int **arr, size_t n);
-void print_matrix(int **arr, size_t n);
-int insert_element(int **m, int *ptr, size_t n);
 
 #endif /* LAPS.H */
