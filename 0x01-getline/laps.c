@@ -1,5 +1,9 @@
 #include "laps.h"
-
+/**
+ * race_state - states of the race
+ * @id:	array of cars
+ * @size:	length of array
+ */
 void race_state(int *id, size_t size)
 {
 	static RaceCar *cars;
@@ -22,6 +26,11 @@ void race_state(int *id, size_t size)
 		Cars = Cars->next;
 	}
 }
+/**
+ * insert_car - inserting new cars
+ * @cars:	list of cars
+ * @id:	id of cars
+ */
 void insert_car(RaceCar **cars, int id)
 {
 	RaceCar *curr, *car;
@@ -51,6 +60,11 @@ void insert_car(RaceCar **cars, int id)
 		printf("Car %d joined the race\n", curr->id);
 	}
 }
+/**
+ * new_car - create a new cars
+ * @id:	car identification
+ * Return:	new car
+ */
 RaceCar *new_car(int id)
 {
 	RaceCar *car;
@@ -62,8 +76,12 @@ RaceCar *new_car(int id)
 	car->id = id;
 	car->laps = 0;
 	car->next = NULL;
-	return car;
+	return (car);
 }
+/**
+ * free_cars - free list of cars
+ * @cars:	list of cars
+ */
 void free_cars(RaceCar *cars)
 {
 	RaceCar *tmp;
