@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ Imports """
 import sys
-import os
 
 
 def get_heap(pid):
@@ -36,16 +35,17 @@ def get_heap(pid):
 def main():
     """ Capture args and write process
     """
+    argc = len(sys.argv)
+
+    if argc <= 3:
+        print("[!] Usage: read_write_heap.py pid search_string replace_string")
+        sys.exit(1)
 
     try:
         pid = sys.argv[1]
         word = sys.argv[2]
         new_word = sys.argv[3]
         l_new_word = len(new_word)
-
-        if word is new_word:
-            print("Words are Equals")
-            sys.exit(1)
 
         pathname = "/proc/{}/mem".format(pid)
 
@@ -71,7 +71,7 @@ def main():
             mem.seek(heap_start + offset)
             mem.write(new_word.encode("ISO-8859-1"))
     except Exception as e:
-        print("[!] Usage: read_write_heap.py pid search_string replace_string")
+        print("[-] FAIL read {}".format(pathname))
         sys.exit(1)
 
 
